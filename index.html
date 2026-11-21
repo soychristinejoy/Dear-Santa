@@ -1,0 +1,2225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santa's Little Elf Letter</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 16px;
+  background: radial-gradient(circle at top, #f4fbf3 0%, #d8eed8 100%);
+  font-family: "Comic Sans MS", "Trebuchet MS", sans-serif;
+  color: #111827;
+}
+
+h1 {
+  text-align: center;
+  color: #111827;
+  font-size: 38px;
+  margin-bottom: 4px;
+  text-shadow: 1px 2px 0 #ffffff;
+}
+
+.subtitle {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 17px;
+  color: #111827;
+}
+
+.container {
+  max-width: 1240px;
+  margin: auto;
+}
+
+/* Main Toggle Toolbar */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #fffdf8;
+  padding: 12px 18px;
+  border-radius: 20px;
+  border: 2px solid #c3dfc3;
+  box-shadow: 0 6px 16px rgba(24, 77, 45, 0.12);
+  margin-bottom: 12px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 2px solid #25834c;
+  background: #eef8ee;
+  color: #111827;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.tool-btn:hover {
+  transform: translateY(-1px);
+}
+
+.tool-btn.active {
+  background: #c62828;
+  color: white;
+  border-color: #c62828;
+  box-shadow: 0 3px 10px rgba(198, 40, 40, 0.3);
+}
+
+.tool-btn.eraser.active {
+  background: #d97706;
+  border-color: #d97706;
+  color: white;
+  box-shadow: 0 3px 10px rgba(217, 119, 6, 0.3);
+}
+
+.tool-btn.sticker-toggle.active {
+  background: #25834c;
+  border-color: #25834c;
+  color: white;
+  box-shadow: 0 3px 10px rgba(37, 131, 76, 0.3);
+}
+
+.clear-btn {
+  border: 2px solid #9ca3af;
+  background: #f9fafb;
+  color: #111827;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.clear-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: white;
+}
+
+/* Collapsible Color & Sticker Panels */
+.panel-box {
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #fffdf8;
+  padding: 12px 18px;
+  border-radius: 20px;
+  border: 2px solid #e2c98d;
+  box-shadow: 0 6px 16px rgba(180, 148, 86, 0.14);
+  margin-bottom: 16px;
+}
+
+.panel-box.open {
+  display: flex;
+}
+
+.panel-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #111827;
+  margin-right: 4px;
+}
+
+.color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.24);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.swatch.white-swatch {
+  border: 2px solid #9ca3af;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+}
+
+.swatch:hover {
+  transform: scale(1.12);
+}
+
+.swatch.selected {
+  border: 3px solid #d99a15;
+  transform: scale(1.18);
+}
+
+.sticker-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 2px solid #d7e8d7;
+  background: #fffaf0;
+  font-size: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.14s ease, background 0.14s ease, border-color 0.14s ease;
+  padding: 0;
+}
+
+.sticker-btn:hover {
+  transform: scale(1.14) rotate(-4deg);
+  background: #eef8ee;
+  border-color: #25834c;
+}
+
+.clear-stickers-btn {
+  border: 2px solid #fca5a5;
+  background: #fef2f2;
+  color: #111827;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+  margin-left: 4px;
+}
+
+.clear-stickers-btn:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+/* Classic North Pole Air-Mail Letter Design */
+.letter-envelope-border {
+  padding: 12px;
+  border-radius: 26px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #c62828 0px,
+    #c62828 16px,
+    #ffffff 16px,
+    #ffffff 28px,
+    #25834c 28px,
+    #25834c 44px,
+    #ffffff 44px,
+    #ffffff 56px
+  );
+  box-shadow: 0 14px 32px rgba(24, 65, 38, 0.22);
+}
+
+.paper {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 248, 225, 0.92), rgba(253, 245, 220, 0.97)),
+    #fffdf5;
+  padding: 20px 22px 18px;
+  border-radius: 18px;
+  border: 3px solid #d4af37;
+  position: relative;
+  overflow: hidden;
+  min-height: 1180px;
+}
+
+/* Letter Header: North Pole Postmark & Stamp */
+.letter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  border-bottom: 2px dashed rgba(198, 40, 40, 0.3);
+  padding-bottom: 10px;
+}
+
+.postmark-box {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: #111827;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.postmark-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid #c62828;
+  color: #111827;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  text-transform: uppercase;
+  width: fit-content;
+  transform: rotate(-2deg);
+}
+
+.letter-title {
+  text-align: center;
+  flex: 1;
+}
+
+.letter-title .garland {
+  color: #111827;
+  font-size: 20px;
+  letter-spacing: 3px;
+  margin-bottom: 1px;
+}
+
+.letter-title h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 42px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  text-shadow: 1px 1px 0 rgba(212, 175, 55, 0.35);
+}
+
+/* Postage Stamp */
+.stamp {
+  width: 74px;
+  height: 84px;
+  background: #fff9eb;
+  border: 3px dotted #c62828;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transform: rotate(3deg);
+  flex-shrink: 0;
+}
+
+.stamp-icon {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.stamp-text {
+  font-size: 10px;
+  font-weight: bold;
+  color: #111827;
+  text-align: center;
+  margin-top: 3px;
+  line-height: 1.1;
+}
+
+/* Maximized Ruled Stationery Writing Area Across the Full Letter Paper */
+.letter-body {
+  color: #111827;
+  background-color: rgba(255, 255, 255, 0.76);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 52px,
+    rgba(180, 148, 86, 0.22) 53px
+  );
+  padding: 20px 18px 28px;
+  border-radius: 14px;
+  border: 1.5px solid #e2c98d;
+  box-shadow: inset 0 1px 6px rgba(180, 148, 86, 0.12);
+  position: relative;
+  min-height: 990px;
+}
+
+.letter-body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 12px;
+  width: 1.5px;
+  background: rgba(198, 40, 40, 0.22);
+  pointer-events: none;
+}
+
+/* Maximized Letter Text Column */
+.letter-main-row {
+  position: relative;
+  z-index: 2;
+  padding-left: 8px;
+  padding-right: 8px;
+  max-width: 900px;
+}
+
+.letter-left-col {
+  width: 100%;
+}
+
+.letter {
+  color: #111827;
+  font-size: 34px;
+  line-height: 1.38;
+}
+
+/* Double space between every sentence */
+.sentence-row {
+  margin-bottom: 28px;
+}
+
+.sentence-row:last-child {
+  margin-bottom: 0;
+}
+
+/* Solid Writing Lines (Longer for Clear Student Handwriting) */
+.letter .blank-line {
+  display: inline-block;
+  border-bottom: 3px solid #16a34a;
+  min-width: 390px;
+  height: 40px;
+  vertical-align: bottom;
+  margin: 0 5px 3px;
+}
+
+.letter .blank-line.short {
+  min-width: 290px;
+}
+
+.letter .blank-line.grade-line {
+  min-width: 145px;
+}
+
+.letter .blank-line.class-line {
+  min-width: 185px;
+}
+
+.letter .blank-line.tiny {
+  min-width: 230px;
+}
+
+/* 2 spaces down after "I hope you say YES!" -> "Love," -> 2 spaces down -> solid line */
+.sign {
+  color: #111827;
+  text-align: left;
+  line-height: 1.4;
+  font-size: 36px;
+  margin-top: 84px;
+}
+
+.sign-line {
+  display: block;
+  border-bottom: 3px solid #16a34a;
+  width: 520px;
+  max-width: 100%;
+  height: 44px;
+  margin-top: 84px;
+}
+
+/* Movable & Resizable Elf Character Container Inside Letter Body */
+.elf-movable-stage {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 25;
+  user-select: none;
+  touch-action: none;
+  padding: 6px;
+  border-radius: 18px;
+  border: 2px dashed transparent;
+}
+
+.elf-movable-stage:hover,
+.elf-movable-stage.selected,
+.elf-movable-stage.dragging,
+.elf-movable-stage.resizing {
+  border-color: rgba(37, 131, 76, 0.55);
+  background: rgba(255, 253, 245, 0.45);
+}
+
+.elf-movable-stage.dragging {
+  cursor: grabbing;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.2));
+}
+
+.style-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.style-btn {
+  border: 2px solid #25834c;
+  background: #fffdf5;
+  color: #111827;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.style-btn.active {
+  background: #25834c;
+  color: white;
+  box-shadow: 0 3px 8px rgba(37, 131, 76, 0.25);
+}
+
+.chosen-gender-label {
+  display: none;
+  margin-bottom: 6px;
+  padding: 5px 16px;
+  border-radius: 999px;
+  background: #25834c;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  box-shadow: 0 3px 8px rgba(37, 131, 76, 0.25);
+  letter-spacing: 0.4px;
+}
+
+.elf-movable-stage.photo-taken .style-toggle {
+  display: none;
+}
+
+.elf-movable-stage.photo-taken .chosen-gender-label {
+  display: inline-block;
+}
+
+.elf-illustration-box {
+  position: relative;
+  width: 268px;
+  height: 384px;
+  cursor: grab;
+  transition: transform 0.15s ease;
+}
+
+.elf-illustration-box:active {
+  cursor: grabbing;
+}
+
+.elf-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* Face-Sized Photo Window Inside the Elf Head */
+.face-hole {
+  position: absolute;
+  top: 25.58%;
+  left: 32%;
+  width: 36%;
+  height: 23.25%;
+  padding: 0;
+  border-radius: 48% 48% 54% 54%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 30;
+  border: 2px dashed #c62828;
+  background: rgba(255, 250, 232, 0.82);
+  font-family: inherit;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.face-hole:hover {
+  transform: scale(1.04);
+  background: rgba(255, 245, 214, 0.96);
+}
+
+.face-hole img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  display: none;
+}
+
+.face-placeholder {
+  font-size: 12px;
+  font-weight: bold;
+  color: #111827;
+  text-align: center;
+  line-height: 1.2;
+  padding: 3px;
+}
+
+.photo-badge {
+  position: absolute;
+  top: 42.7%;
+  right: 2.2%;
+  background: #c62828;
+  color: white;
+  font-size: 17px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2.5px solid #fffdf3;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index: 31;
+}
+
+.elf-resize-handle {
+  display: none;
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #25834c;
+  color: #ffffff;
+  border: 2.5px solid #ffffff;
+  font-size: 13px;
+  font-weight: bold;
+  align-items: center;
+  justify-content: center;
+  cursor: nwse-resize;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+  z-index: 32;
+}
+
+.elf-movable-stage:hover .elf-resize-handle,
+.elf-movable-stage.selected .elf-resize-handle,
+.elf-movable-stage.resizing .elf-resize-handle {
+  display: inline-flex;
+}
+
+/* Draggable & Resizable Christmas Stickers Layer Inside Letter Body */
+.stickers-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 28;
+  pointer-events: none;
+}
+
+.placed-sticker-wrap {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  pointer-events: auto;
+  padding: 6px;
+  border-radius: 14px;
+  border: 2px dashed transparent;
+}
+
+.placed-sticker-wrap:hover,
+.placed-sticker-wrap.selected,
+.placed-sticker-wrap.dragging {
+  border-color: rgba(37, 131, 76, 0.65);
+  background: rgba(255, 253, 245, 0.45);
+}
+
+.placed-sticker-wrap.dragging {
+  cursor: grabbing;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.28));
+}
+
+.placed-sticker-glyph {
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18));
+}
+
+.sticker-resize-handle {
+  display: none;
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #c62828;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  align-items: center;
+  justify-content: center;
+  cursor: nwse-resize;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+
+.placed-sticker-wrap:hover .sticker-resize-handle,
+.placed-sticker-wrap.selected .sticker-resize-handle,
+.placed-sticker-wrap.resizing .sticker-resize-handle {
+  display: inline-flex;
+}
+
+/* Freehand Pencil & Eraser Drawing Overlay Across Extended Letter */
+.draw-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  border-radius: 14px;
+  touch-action: none;
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.draw-canvas.eraser-cursor {
+  cursor: cell;
+}
+
+/* Letter Footer */
+.letter-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 2px dashed rgba(198, 40, 40, 0.28);
+  color: #111827;
+  font-size: 22px;
+}
+
+.wax-seal {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #e53935, #9b111e);
+  color: #ffd54f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 3px 8px rgba(155, 17, 30, 0.35), inset 0 0 0 3px rgba(255, 213, 79, 0.45);
+  transform: rotate(-8deg);
+}
+
+/* Camera Modal */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-card {
+  background: #fffdf3;
+  border: 4px solid #25834c;
+  border-radius: 20px;
+  padding: 22px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.modal-card h3 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 24px;
+}
+
+.modal-card video {
+  width: 100%;
+  border-radius: 12px;
+  background: #e4f3df;
+  transform: scaleX(-1);
+  display: none;
+}
+
+.modal-status {
+  margin: 10px 0;
+  font-size: 15px;
+  color: #111827;
+}
+
+.actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+button.action-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin: 6px;
+  background: #c62828;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
+}
+
+button.action-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.green { background: #25834c !important; }
+.gold { background: #d99a15 !important; color: #fff !important; }
+.blue { background: #2b6cb0 !important; color: #fff !important; }
+
+@media (max-width: 980px) {
+  .letter-main-row { max-width: 100%; }
+  .letter-body { padding-bottom: 450px; }
+  .elf-movable-stage {
+    top: auto;
+    bottom: 16px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 760px) {
+  .letter-header { flex-direction: column; align-items: center; text-align: center; }
+  .paper { padding: 16px 12px; }
+  .letter { font-size: 26px; }
+  .sign { font-size: 28px; margin-top: 64px; }
+  .sign-line { margin-top: 64px; }
+  .letter .blank-line { min-width: 240px; }
+  .letter .blank-line.short { min-width: 185px; }
+  .letter .blank-line.grade-line { min-width: 95px; }
+  .letter .blank-line.class-line { min-width: 120px; }
+  .letter .blank-line.tiny { min-width: 150px; }
+  body { padding: 10px; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎅 Santa's Little Elf Letter 🎄</h1>
+<p class="subtitle">Choose a Boy or Girl elf, take a photo, and drag or resize (drag ⤢ or scroll) your elf &amp; stickers anywhere on the letter!</p>
+
+<div class="container">
+
+  <!-- MAIN TOGGLE TOOLBAR -->
+  <div class="toolbar">
+    <button type="button" class="tool-btn active" id="pencilBtn" onclick="togglePencilPanel()">
+      ✏️ Pencil
+    </button>
+
+    <button type="button" class="tool-btn sticker-toggle" id="stickerToggleBtn" onclick="toggleStickerPanel()">
+      🎄 Stickers
+    </button>
+
+    <button type="button" class="tool-btn eraser" id="eraserBtn" onclick="setTool('eraser')">
+      🧼 Eraser
+    </button>
+
+    <button type="button" class="clear-btn" onclick="clearDrawing()">
+      🗑️ Clear All
+    </button>
+  </div>
+
+  <!-- TOGGLEABLE COLOR PALETTE (SHOWN WHEN PENCIL IS CLICKED) -->
+  <div class="panel-box open" id="colorPanel">
+    <span class="panel-label">🎨 Choose Pencil Color:</span>
+    <div class="color-swatches" aria-label="Pencil colors">
+      <button type="button" class="swatch" style="background:#dc2626" title="Red" onclick="selectColor('#dc2626', this)"></button>
+      <button type="button" class="swatch" style="background:#eab308" title="Yellow" onclick="selectColor('#eab308', this)"></button>
+      <button type="button" class="swatch" style="background:#111827" title="Black" onclick="selectColor('#111827', this)"></button>
+      <button type="button" class="swatch white-swatch" style="background:#ffffff" title="White" onclick="selectColor('#ffffff', this)"></button>
+      <button type="button" class="swatch" style="background:#2563eb" title="Blue" onclick="selectColor('#2563eb', this)"></button>
+      <button type="button" class="swatch selected" style="background:#16a34a" title="Green" onclick="selectColor('#16a34a', this)"></button>
+      <button type="button" class="swatch" style="background:#f97316" title="Orange" onclick="selectColor('#f97316', this)"></button>
+      <button type="button" class="swatch" style="background:#ec4899" title="Pink" onclick="selectColor('#ec4899', this)"></button>
+      <button type="button" class="swatch" style="background:#9333ea" title="Purple" onclick="selectColor('#9333ea', this)"></button>
+    </div>
+  </div>
+
+  <!-- TOGGLEABLE CHRISTMAS STICKER PICKER (SHOWN WHEN STICKERS BUTTON IS CLICKED) -->
+  <div class="panel-box" id="stickerPanel" aria-label="Christmas stickers">
+    <span class="panel-label">✨ Choose Stickers (drag to move, drag ⤢ corner or scroll to resize bigger/smaller, double-click to remove):</span>
+    <button type="button" class="sticker-btn" onclick="addSticker('🎄')" title="Christmas Tree">🎄</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('🎅')" title="Santa Claus">🎅</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('🤶')" title="Mrs. Claus">🤶</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('🧝')" title="Elf">🧝</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('🦌')" title="Reindeer">🦌</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('⛄')" title="Snowman">⛄</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('🎁')" title="Gift Box">🎁</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('🔔')" title="Jingle Bell">🔔</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('⭐')" title="Star">⭐</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('❄️')" title="Snowflake">❄️</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('🍬')" title="Candy">🍬</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('🍪')" title="Cookie">🍪</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('🕯️')" title="Candle">🕯️</button>
+    <button type="button" class="sticker-btn" onclick="addSticker('🧦')" title="Stocking">🧦</button>
+    <button type="button" class="clear-stickers-btn" onclick="clearStickers()">✖ Clear Stickers</button>
+  </div>
+
+  <!-- AIR-MAIL LETTER ENVELOPE FRAME -->
+  <div class="letter-envelope-border">
+    <div class="paper" id="letter">
+
+      <!-- Letter Top Postmark & Stamp -->
+      <div class="letter-header">
+        <div class="postmark-box">
+          <div class="postmark-badge">✈️ North Pole Express</div>
+          <span>TO: Santa Claus, Workshop #1</span>
+        </div>
+
+        <div class="letter-title">
+          <div class="garland">❄ ✦ 🎄 ✦ ❄</div>
+          <h2>Dear Santa</h2>
+        </div>
+
+        <div class="stamp">
+          <div class="stamp-icon">🦌</div>
+          <div class="stamp-text">NORTH POLE<br>OFFICIAL MAIL</div>
+        </div>
+      </div>
+
+      <!-- Maximized Ruled Letter Paper -->
+      <div class="letter-body" id="letterBody">
+        <canvas class="draw-canvas" id="drawCanvas"></canvas>
+
+        <!-- Maximized Letter Text Area -->
+        <div class="letter-main-row">
+          <div class="letter-left-col">
+            <div class="letter">
+              <div class="sentence-row">My name is <span class="blank-line" id="bName"></span>.</div>
+              <div class="sentence-row">I'm <span class="blank-line short" id="bAge"></span> years old.</div>
+              <div class="sentence-row">I'm in grade <span class="blank-line grade-line" id="bGrade"></span> class <span class="blank-line class-line" id="bClass"></span>.</div>
+              <div class="sentence-row">I live in Nantou City.</div>
+              <div class="sentence-row">I'm a good <span class="blank-line tiny" id="bGood"></span>.</div>
+              <div class="sentence-row">I want to help you make toys and wrap presents.</div>
+              <div class="sentence-row">Can I be one of your elves?</div>
+              <div class="sentence-row">I hope you say YES!</div>
+            </div>
+
+            <div class="sign">
+              Love,
+              <span class="sign-line" id="bSign"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Separate Movable & Resizable Elf Character Inside Letter -->
+        <div class="elf-movable-stage" id="elfStage">
+          <div class="style-toggle">
+            <button type="button" class="style-btn active" id="boyBtn" onclick="setElfGender('boy')">👦 Boy Elf</button>
+            <button type="button" class="style-btn" id="girlBtn" onclick="setElfGender('girl')">👧 Girl Elf</button>
+          </div>
+          <div class="chosen-gender-label" id="chosenGenderLabel">Boy Elf</div>
+
+          <div class="elf-illustration-box" id="elfDragHandle" title="Drag elf to move • Drag ⤢ or scroll to resize bigger/smaller">
+            <button type="button" class="face-hole" id="faceHole" title="Click face area to take a picture!">
+              <span class="face-placeholder" id="facePlaceholder">📷 Face<br>Photo</span>
+              <img id="faceImg" alt="Your Face">
+            </button>
+
+            <button type="button" class="photo-badge" id="cameraBadgeBtn" title="Click camera button to take a picture!">📷</button>
+
+            <button type="button" class="elf-resize-handle" id="elfResizeHandle" title="Drag to resize elf bigger or smaller">⤢</button>
+
+            <!-- Boy / Girl Elf SVG with Natural Face Proportions -->
+            <svg class="elf-svg" id="elfSvg" viewBox="0 0 300 430" xmlns="http://www.w3.org/2000/svg">
+              <!-- Girl Pigtails (behind head) -->
+              <g id="girlHairBack" style="display:none;">
+                <path d="M80 158 C38 168, 24 212, 40 244 C52 226, 64 218, 84 204 Z" fill="#7c3f1d" stroke="#222" stroke-width="3.5"/>
+                <path d="M220 158 C262 168, 276 212, 260 244 C248 226, 236 218, 216 204 Z" fill="#7c3f1d" stroke="#222" stroke-width="3.5"/>
+                <circle cx="75" cy="180" r="8" fill="#d92b2b" stroke="#222" stroke-width="2.4"/>
+                <circle cx="225" cy="180" r="8" fill="#d92b2b" stroke="#222" stroke-width="2.4"/>
+              </g>
+
+              <!-- Pointed Elf Ears -->
+              <path d="M76 140 L24 126 L60 170 Z" fill="#f7c59f" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+              <path d="M68 142 L38 134 L62 158 Z" fill="#e59872"/>
+
+              <path d="M224 140 L276 126 L240 170 Z" fill="#f7c59f" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+              <path d="M232 142 L262 134 L238 158 Z" fill="#e59872"/>
+
+              <!-- Head Base -->
+              <ellipse cx="150" cy="158" rx="80" ry="68" fill="#f7c59f" stroke="#222" stroke-width="3.5"/>
+
+              <!-- Hair Bangs -->
+              <path id="hairBangs" d="M72 136 Q94 102 120 124 Q150 100 180 124 Q206 102 228 136 Q198 122 174 128 Q150 114 126 128 Q102 122 72 136 Z" fill="#7c3f1d" stroke="#222" stroke-width="2.8"/>
+
+              <!-- Elf Hat -->
+              <path d="M70 116 C68 48, 134 10, 204 22 C234 27, 254 48, 250 70 C245 84, 224 84, 219 70 C214 56, 194 54, 176 66 L224 116 Z" fill="#d92b2b" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+              <circle cx="242" cy="64" r="14" fill="#1b9e4b" stroke="#222" stroke-width="3.5"/>
+              <path d="M72 100 Q96 86 120 100 Q144 86 168 100 Q192 86 216 100 L223 113 Q199 101 175 113 Q151 101 127 113 Q103 101 77 113 Z" fill="#ffffff" stroke="#222" stroke-width="2.8"/>
+              <path d="M68 110 L218 110 L225 130 L65 130 Z" fill="#1b9e4b" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+
+              <!-- Legs & Curly Elf Shoes -->
+              <rect x="108" y="330" width="28" height="54" fill="#d92b2b" stroke="#222" stroke-width="3.5"/>
+              <rect x="164" y="330" width="28" height="54" fill="#d92b2b" stroke="#222" stroke-width="3.5"/>
+
+              <path d="M96 382 L138 382 L138 406 L84 406 C70 406, 68 382, 84 378 C92 376, 96 382, 96 382 Z" fill="#1b9e4b" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+              <circle cx="82" cy="376" r="8" fill="#1b9e4b" stroke="#222" stroke-width="2.8"/>
+
+              <path d="M162 382 L204 382 C204 382, 208 376, 216 378 C232 382, 230 406, 216 406 L162 406 Z" fill="#1b9e4b" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+              <circle cx="218" cy="376" r="8" fill="#1b9e4b" stroke="#222" stroke-width="2.8"/>
+
+              <!-- Arms & Hands -->
+              <path d="M92 232 L50 280 L66 296 L104 254 Z" fill="#1b9e4b" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+              <circle cx="53" cy="294" r="15" fill="#f7c59f" stroke="#222" stroke-width="3.5"/>
+
+              <path d="M208 232 L250 280 L234 296 L196 254 Z" fill="#1b9e4b" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+              <circle cx="247" cy="294" r="15" fill="#f7c59f" stroke="#222" stroke-width="3.5"/>
+
+              <!-- Boy Tunic Body -->
+              <path id="boyTunic" d="M90 224 L210 224 L226 336 L200 324 L175 338 L150 324 L125 338 L100 324 L74 336 Z" fill="#1b9e4b" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+
+              <!-- Girl Dress Body -->
+              <path id="girlDress" style="display:none;" d="M94 224 L206 224 L232 336 L68 336 Z" fill="#1b9e4b" stroke="#222" stroke-width="3.5" stroke-linejoin="round"/>
+
+              <!-- Red Pointed Collar -->
+              <path d="M108 220 L150 248 L192 220 L201 240 L175 254 L150 242 L125 254 L99 240 Z" fill="#d92b2b" stroke="#222" stroke-width="3" stroke-linejoin="round"/>
+
+              <!-- Black Belt & Gold Buckle -->
+              <rect x="82" y="274" width="136" height="20" fill="#222222"/>
+              <rect x="135" y="269" width="30" height="30" rx="4" fill="none" stroke="#f5b700" stroke-width="5.5"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Draggable & Resizable Christmas Stickers Layer -->
+        <div class="stickers-layer" id="stickersLayer"></div>
+      </div>
+
+      <!-- Letter Footer with Wax Seal -->
+      <div class="letter-footer">
+        <span>🎄 ⭐ 🎁</span>
+        <span style="font-size: 14px; font-weight: bold; color: #111827; letter-spacing: 1px;">SANTA'S OFFICIAL ELF APPLICATION</span>
+        <div class="wax-seal" title="North Pole Official Seal">❄</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="action-btn green" onclick="downloadPNG()">⬇ Download Letter PNG</button>
+  </div>
+</div>
+
+<!-- PHOTO MODAL -->
+<div class="modal-backdrop" id="photoModal">
+  <div class="modal-card">
+    <h3>🧝 Elf Face Photo Booth!</h3>
+    <video id="video" autoplay playsinline></video>
+    <p class="modal-status" id="modalStatus">Center your face in the frame and click "Snap Photo"!</p>
+
+    <button type="button" class="action-btn green" onclick="startCamera()">📸 Start Camera</button>
+    <button type="button" class="action-btn gold" onclick="takePhoto()">✨ Snap Photo</button>
+    <label class="action-btn blue" style="display:inline-block;cursor:pointer;">
+      📁 Upload Photo
+      <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="uploadPhoto(event)">
+    </label>
+    <br>
+    <button type="button" class="action-btn" onclick="closePhotoModal()">Done / Close</button>
+  </div>
+</div>
+
+<!-- HIDDEN CANVAS FOR PNG -->
+<canvas id="canvas" width="1340" height="1700" style="display:none"></canvas>
+
+<script>
+let activeTool = 'pencil';
+let currentColor = '#16a34a';
+const fixedTextColor = '#111827';
+let elfGender = 'boy';
+let stream = null;
+let photoCanvas = null;
+
+const letterBodyEl = document.getElementById('letterBody');
+const colorPanelEl = document.getElementById('colorPanel');
+const stickerPanelEl = document.getElementById('stickerPanel');
+const pencilBtnEl = document.getElementById('pencilBtn');
+const stickerToggleBtnEl = document.getElementById('stickerToggleBtn');
+const eraserBtnEl = document.getElementById('eraserBtn');
+
+function togglePencilPanel() {
+  const willOpen = !colorPanelEl.classList.contains('open');
+  colorPanelEl.classList.toggle('open', willOpen);
+  if (willOpen) {
+    stickerPanelEl.classList.remove('open');
+    stickerToggleBtnEl.classList.remove('active');
+    setTool('pencil');
+  }
+}
+
+function toggleStickerPanel() {
+  const willOpen = !stickerPanelEl.classList.contains('open');
+  stickerPanelEl.classList.toggle('open', willOpen);
+  stickerToggleBtnEl.classList.toggle('active', willOpen);
+  if (willOpen) {
+    colorPanelEl.classList.remove('open');
+  }
+}
+
+// Movable & Resizable Elf Character Inside Letter Body
+const BASE_ELF_WIDTH = 268;
+const BASE_ELF_HEIGHT = 384;
+const elfStageEl = document.getElementById('elfStage');
+const elfDragHandleEl = document.getElementById('elfDragHandle');
+const elfResizeHandleEl = document.getElementById('elfResizeHandle');
+
+let elfScale = 1;
+let elfPos = { x: null, y: 14 };
+let isDraggingElf = false;
+let isResizingElf = false;
+let elfDragOffset = { x: 0, y: 0 };
+let elfResizeStartX = 0;
+let elfResizeStartY = 0;
+let elfResizeStartScale = 1;
+
+function applyElfDimensions(scale) {
+  elfScale = Math.max(0.55, Math.min(1.75, scale));
+  const w = Math.round(BASE_ELF_WIDTH * elfScale);
+  const h = Math.round(BASE_ELF_HEIGHT * elfScale);
+  elfDragHandleEl.style.width = `${w}px`;
+  elfDragHandleEl.style.height = `${h}px`;
+  document.getElementById('facePlaceholder').style.fontSize = `${Math.max(8, Math.round(12 * elfScale))}px`;
+  document.getElementById('cameraBadgeBtn').style.width = `${Math.max(24, Math.round(36 * elfScale))}px`;
+  document.getElementById('cameraBadgeBtn').style.height = `${Math.max(24, Math.round(36 * elfScale))}px`;
+  document.getElementById('cameraBadgeBtn').style.fontSize = `${Math.max(11, Math.round(17 * elfScale))}px`;
+}
+
+function placeElfStage(x, y) {
+  const bodyRect = letterBodyEl.getBoundingClientRect();
+  const stageWidth = elfStageEl.offsetWidth || (BASE_ELF_WIDTH * elfScale + 12);
+  const stageHeight = elfStageEl.offsetHeight || (BASE_ELF_HEIGHT * elfScale + 45);
+  const maxX = Math.max(0, bodyRect.width - stageWidth);
+  const maxY = Math.max(0, bodyRect.height - stageHeight);
+
+  const clampedX = Math.max(0, Math.min(maxX, x));
+  const clampedY = Math.max(0, Math.min(maxY, y));
+
+  elfPos.x = clampedX;
+  elfPos.y = clampedY;
+
+  elfStageEl.style.left = `${clampedX}px`;
+  elfStageEl.style.top = `${clampedY}px`;
+  elfStageEl.style.right = 'auto';
+  elfStageEl.style.bottom = 'auto';
+  elfStageEl.style.transform = 'none';
+}
+
+function initDefaultElfPosition() {
+  applyElfDimensions(elfScale);
+  const bodyRect = letterBodyEl.getBoundingClientRect();
+  if (!bodyRect.width) return;
+  const stageWidth = elfStageEl.offsetWidth || (BASE_ELF_WIDTH * elfScale + 12);
+  const stageHeight = elfStageEl.offsetHeight || (BASE_ELF_HEIGHT * elfScale + 45);
+  const defaultX = window.innerWidth <= 980
+    ? Math.max(0, (bodyRect.width - stageWidth) / 2)
+    : Math.max(0, bodyRect.width - stageWidth - 14);
+  const defaultY = window.innerWidth <= 980
+    ? Math.max(0, bodyRect.height - stageHeight - 16)
+    : 14;
+  placeElfStage(defaultX, defaultY);
+}
+
+window.addEventListener('load', () => {
+  resizeDrawCanvas();
+  initDefaultElfPosition();
+});
+
+window.addEventListener('resize', () => {
+  resizeDrawCanvas();
+  if (elfPos.x === null) {
+    initDefaultElfPosition();
+  } else {
+    placeElfStage(elfPos.x, elfPos.y);
+  }
+});
+
+elfDragHandleEl.addEventListener('pointerdown', e => {
+  if (e.target.closest('#faceHole') || e.target.closest('#cameraBadgeBtn')) return;
+
+  elfStageEl.classList.add('selected');
+  e.preventDefault();
+  e.stopPropagation();
+
+  if (e.target === elfResizeHandleEl) {
+    isResizingElf = true;
+    elfStageEl.classList.add('resizing');
+    elfResizeStartX = e.clientX;
+    elfResizeStartY = e.clientY;
+    elfResizeStartScale = elfScale;
+    elfResizeHandleEl.setPointerCapture(e.pointerId);
+    return;
+  }
+
+  isDraggingElf = true;
+  elfStageEl.classList.add('dragging');
+
+  const stageRect = elfStageEl.getBoundingClientRect();
+  elfDragOffset.x = e.clientX - stageRect.left;
+  elfDragOffset.y = e.clientY - stageRect.top;
+  elfDragHandleEl.setPointerCapture(e.pointerId);
+});
+
+elfDragHandleEl.addEventListener('pointermove', e => {
+  if (isResizingElf) {
+    e.preventDefault();
+    const deltaPx = Math.max(e.clientX - elfResizeStartX, e.clientY - elfResizeStartY);
+    const nextScale = elfResizeStartScale + deltaPx / BASE_ELF_WIDTH;
+    applyElfDimensions(nextScale);
+    if (elfPos.x !== null) {
+      placeElfStage(elfPos.x, elfPos.y);
+    }
+    return;
+  }
+
+  if (!isDraggingElf) return;
+  e.preventDefault();
+  const bodyRect = letterBodyEl.getBoundingClientRect();
+  const nextX = e.clientX - bodyRect.left - elfDragOffset.x;
+  const nextY = e.clientY - bodyRect.top - elfDragOffset.y;
+  placeElfStage(nextX, nextY);
+});
+
+function stopElfInteraction(e) {
+  if (isResizingElf) {
+    isResizingElf = false;
+    elfStageEl.classList.remove('resizing');
+    if (e && elfResizeHandleEl.hasPointerCapture(e.pointerId)) {
+      elfResizeHandleEl.releasePointerCapture(e.pointerId);
+    }
+  }
+  if (isDraggingElf) {
+    isDraggingElf = false;
+    elfStageEl.classList.remove('dragging');
+    if (e && elfDragHandleEl.hasPointerCapture(e.pointerId)) {
+      elfDragHandleEl.releasePointerCapture(e.pointerId);
+    }
+  }
+}
+
+elfDragHandleEl.addEventListener('pointerup', stopElfInteraction);
+elfDragHandleEl.addEventListener('pointercancel', stopElfInteraction);
+
+elfDragHandleEl.addEventListener('wheel', e => {
+  e.preventDefault();
+  e.stopPropagation();
+  elfStageEl.classList.add('selected');
+  const step = e.deltaY < 0 ? 0.08 : -0.08;
+  applyElfDimensions(elfScale + step);
+  if (elfPos.x !== null) {
+    placeElfStage(elfPos.x, elfPos.y);
+  }
+}, { passive: false });
+
+// Draggable & Resizable Christmas Stickers State & Logic
+const stickersLayerEl = document.getElementById('stickersLayer');
+const placedStickers = [];
+let stickerCounter = 0;
+let selectedStickerId = null;
+
+function selectSticker(id) {
+  selectedStickerId = id;
+  placedStickers.forEach(s => {
+    s.wrapEl.classList.toggle('selected', s.id === id);
+  });
+}
+
+document.addEventListener('pointerdown', e => {
+  if (!e.target.closest('.placed-sticker-wrap')) {
+    selectSticker(null);
+  }
+  if (!e.target.closest('.elf-movable-stage')) {
+    elfStageEl.classList.remove('selected');
+  }
+});
+
+function addSticker(emoji) {
+  const bodyRect = letterBodyEl.getBoundingClientRect();
+  const defaultSize = 52;
+  const maxX = Math.max(20, (bodyRect.width || 700) - defaultSize - 20);
+  const maxY = Math.max(20, (bodyRect.height || 700) - defaultSize - 20);
+
+  const offsetIndex = placedStickers.length % 7;
+  const startX = Math.min(maxX, 70 + offsetIndex * 46);
+  const startY = Math.min(maxY, 680 + (offsetIndex % 3) * 56);
+
+  const item = {
+    id: ++stickerCounter,
+    emoji,
+    x: startX,
+    y: startY,
+    size: defaultSize,
+    wrapEl: null,
+    glyphEl: null,
+    handleEl: null
+  };
+
+  const wrapEl = document.createElement('div');
+  wrapEl.className = 'placed-sticker-wrap';
+  wrapEl.style.left = `${item.x}px`;
+  wrapEl.style.top = `${item.y}px`;
+  wrapEl.title = 'Drag to move • Drag ⤢ or scroll wheel to resize • Double-click to remove';
+
+  const glyphEl = document.createElement('span');
+  glyphEl.className = 'placed-sticker-glyph';
+  glyphEl.textContent = emoji;
+  glyphEl.style.fontSize = `${item.size}px`;
+
+  const handleEl = document.createElement('span');
+  handleEl.className = 'sticker-resize-handle';
+  handleEl.textContent = '⤢';
+  handleEl.title = 'Drag to resize sticker bigger or smaller';
+
+  wrapEl.appendChild(glyphEl);
+  wrapEl.appendChild(handleEl);
+
+  item.wrapEl = wrapEl;
+  item.glyphEl = glyphEl;
+  item.handleEl = handleEl;
+
+  function applyStickerSize(newSize) {
+    const clampedSize = Math.max(22, Math.min(180, Math.round(newSize)));
+    item.size = clampedSize;
+    glyphEl.style.fontSize = `${clampedSize}px`;
+
+    const bRect = letterBodyEl.getBoundingClientRect();
+    const w = wrapEl.offsetWidth || clampedSize + 12;
+    const h = wrapEl.offsetHeight || clampedSize + 12;
+    item.x = Math.max(0, Math.min(bRect.width - w, item.x));
+    item.y = Math.max(0, Math.min(bRect.height - h, item.y));
+    wrapEl.style.left = `${item.x}px`;
+    wrapEl.style.top = `${item.y}px`;
+  }
+
+  let draggingSticker = false;
+  let resizingSticker = false;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+  let resizeStartX = 0;
+  let resizeStartY = 0;
+  let resizeStartSize = item.size;
+
+  wrapEl.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    selectSticker(item.id);
+
+    if (e.target === handleEl) {
+      resizingSticker = true;
+      wrapEl.classList.add('resizing');
+      resizeStartX = e.clientX;
+      resizeStartY = e.clientY;
+      resizeStartSize = item.size;
+      handleEl.setPointerCapture(e.pointerId);
+      return;
+    }
+
+    draggingSticker = true;
+    wrapEl.classList.add('dragging');
+    const r = wrapEl.getBoundingClientRect();
+    dragOffsetX = e.clientX - r.left;
+    dragOffsetY = e.clientY - r.top;
+    wrapEl.setPointerCapture(e.pointerId);
+  });
+
+  wrapEl.addEventListener('pointermove', e => {
+    if (resizingSticker) {
+      e.preventDefault();
+      const delta = Math.max(e.clientX - resizeStartX, e.clientY - resizeStartY);
+      applyStickerSize(resizeStartSize + delta);
+      return;
+    }
+
+    if (!draggingSticker) return;
+    e.preventDefault();
+    const bRect = letterBodyEl.getBoundingClientRect();
+    const w = wrapEl.offsetWidth || item.size;
+    const h = wrapEl.offsetHeight || item.size;
+    const nx = Math.max(0, Math.min(bRect.width - w, e.clientX - bRect.left - dragOffsetX));
+    const ny = Math.max(0, Math.min(bRect.height - h, e.clientY - bRect.top - dragOffsetY));
+    item.x = nx;
+    item.y = ny;
+    wrapEl.style.left = `${nx}px`;
+    wrapEl.style.top = `${ny}px`;
+  });
+
+  function stopStickerInteraction(e) {
+    if (resizingSticker) {
+      resizingSticker = false;
+      wrapEl.classList.remove('resizing');
+      if (e && handleEl.hasPointerCapture(e.pointerId)) {
+        handleEl.releasePointerCapture(e.pointerId);
+      }
+    }
+    if (draggingSticker) {
+      draggingSticker = false;
+      wrapEl.classList.remove('dragging');
+      if (e && wrapEl.hasPointerCapture(e.pointerId)) {
+        wrapEl.releasePointerCapture(e.pointerId);
+      }
+    }
+  }
+
+  wrapEl.addEventListener('pointerup', stopStickerInteraction);
+  wrapEl.addEventListener('pointercancel', stopStickerInteraction);
+
+  wrapEl.addEventListener('wheel', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    selectSticker(item.id);
+    const step = e.deltaY < 0 ? 6 : -6;
+    applyStickerSize(item.size + step);
+  }, { passive: false });
+
+  wrapEl.addEventListener('dblclick', e => {
+    e.stopPropagation();
+    const idx = placedStickers.findIndex(s => s.id === item.id);
+    if (idx !== -1) {
+      placedStickers.splice(idx, 1);
+    }
+    if (selectedStickerId === item.id) {
+      selectedStickerId = null;
+    }
+    wrapEl.remove();
+  });
+
+  stickersLayerEl.appendChild(wrapEl);
+  placedStickers.push(item);
+  selectSticker(item.id);
+}
+
+function clearStickers() {
+  placedStickers.length = 0;
+  selectedStickerId = null;
+  stickersLayerEl.innerHTML = '';
+}
+
+// Freehand Drawing & Eraser Setup
+const drawCanvas = document.getElementById('drawCanvas');
+const drawCtx = drawCanvas.getContext('2d');
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+
+function resizeDrawCanvas() {
+  const rect = letterBodyEl.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) return;
+
+  const temp = document.createElement('canvas');
+  temp.width = drawCanvas.width || 1;
+  temp.height = drawCanvas.height || 1;
+  temp.getContext('2d').drawImage(drawCanvas, 0, 0);
+
+  drawCanvas.width = Math.round(rect.width);
+  drawCanvas.height = Math.round(rect.height);
+  drawCtx.drawImage(temp, 0, 0, drawCanvas.width, drawCanvas.height);
+}
+
+function getPointerPos(e) {
+  const rect = drawCanvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top
+  };
+}
+
+function applyStrokeStyle() {
+  drawCtx.lineCap = 'round';
+  drawCtx.lineJoin = 'round';
+  if (activeTool === 'eraser') {
+    drawCtx.globalCompositeOperation = 'destination-out';
+    drawCtx.lineWidth = 24;
+    drawCtx.strokeStyle = 'rgba(0,0,0,1)';
+    drawCtx.fillStyle = 'rgba(0,0,0,1)';
+  } else {
+    drawCtx.globalCompositeOperation = 'source-over';
+    drawCtx.lineWidth = 4.5;
+    drawCtx.strokeStyle = currentColor;
+    drawCtx.fillStyle = currentColor;
+  }
+}
+
+function startStroke(e) {
+  if (e.target.closest('.elf-movable-stage') || e.target.closest('.placed-sticker-wrap')) return;
+  e.preventDefault();
+  const pos = getPointerPos(e);
+  isDrawing = true;
+  lastX = pos.x;
+  lastY = pos.y;
+
+  drawCtx.save();
+  applyStrokeStyle();
+  drawCtx.beginPath();
+  const radius = activeTool === 'eraser' ? 12 : 2.25;
+  drawCtx.arc(lastX, lastY, radius, 0, Math.PI * 2);
+  drawCtx.fill();
+  drawCtx.restore();
+}
+
+function moveStroke(e) {
+  if (!isDrawing) return;
+  e.preventDefault();
+  const pos = getPointerPos(e);
+
+  drawCtx.save();
+  applyStrokeStyle();
+  drawCtx.beginPath();
+  drawCtx.moveTo(lastX, lastY);
+  drawCtx.lineTo(pos.x, pos.y);
+  drawCtx.stroke();
+  drawCtx.restore();
+
+  lastX = pos.x;
+  lastY = pos.y;
+}
+
+function endStroke() {
+  isDrawing = false;
+}
+
+drawCanvas.addEventListener('mousedown', startStroke);
+drawCanvas.addEventListener('mousemove', moveStroke);
+window.addEventListener('mouseup', endStroke);
+
+drawCanvas.addEventListener('touchstart', startStroke, { passive: false });
+drawCanvas.addEventListener('touchmove', moveStroke, { passive: false });
+window.addEventListener('touchend', endStroke);
+
+function setTool(tool) {
+  activeTool = tool;
+  pencilBtnEl.classList.toggle('active', tool === 'pencil');
+  eraserBtnEl.classList.toggle('active', tool === 'eraser');
+  drawCanvas.classList.toggle('eraser-cursor', tool === 'eraser');
+}
+
+function clearDrawing() {
+  drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+}
+
+function updateGenderLabelText() {
+  const labelEl = document.getElementById('chosenGenderLabel');
+  labelEl.textContent = elfGender === 'girl' ? 'Girl Elf' : 'Boy Elf';
+}
+
+function setElfGender(gender) {
+  elfGender = gender;
+  document.getElementById('boyBtn').classList.toggle('active', gender === 'boy');
+  document.getElementById('girlBtn').classList.toggle('active', gender === 'girl');
+  updateGenderLabelText();
+
+  document.getElementById('boyTunic').style.display = gender === 'boy' ? 'block' : 'none';
+  document.getElementById('girlDress').style.display = gender === 'girl' ? 'block' : 'none';
+  document.getElementById('girlHairBack').style.display = gender === 'girl' ? 'block' : 'none';
+}
+
+function selectColor(color, swatchEl) {
+  currentColor = color;
+  setTool('pencil');
+  const lineColor = color === '#ffffff' ? '#9ca3af' : color;
+
+  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
+  if (swatchEl) {
+    swatchEl.classList.add('selected');
+  }
+  document.querySelectorAll('.blank-line, .sign-line').forEach(line => {
+    line.style.borderBottomColor = lineColor;
+  });
+}
+
+function openPhotoModal(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  isDrawing = false;
+  isDraggingElf = false;
+  isResizingElf = false;
+  elfStageEl.classList.remove('dragging', 'resizing');
+  document.getElementById('photoModal').classList.add('open');
+  startCamera();
+}
+
+function bindPhotoTriggers() {
+  const triggers = [
+    document.getElementById('faceHole'),
+    document.getElementById('cameraBadgeBtn')
+  ];
+  triggers.forEach(btn => {
+    if (!btn) return;
+    btn.addEventListener('pointerdown', e => {
+      e.stopPropagation();
+    });
+    btn.addEventListener('click', e => {
+      openPhotoModal(e);
+    });
+  });
+}
+
+bindPhotoTriggers();
+
+function closePhotoModal() {
+  stopCamera();
+  document.getElementById('photoModal').classList.remove('open');
+}
+
+async function startCamera() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    document.getElementById('modalStatus').textContent =
+      'Camera not available here. Click "Upload Photo" to pick a picture!';
+    return;
+  }
+
+  try {
+    stopCamera();
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user' },
+      audio: false
+    });
+    const video = document.getElementById('video');
+    video.srcObject = stream;
+    video.style.display = 'block';
+    document.getElementById('modalStatus').textContent = 'Center your face and click "Snap Photo"!';
+  } catch (err) {
+    document.getElementById('modalStatus').textContent =
+      'Could not open camera. Please allow camera access or click "Upload Photo".';
+  }
+}
+
+function cropToFaceSize(sourceCanvas) {
+  const sw = sourceCanvas.width;
+  const sh = sourceCanvas.height;
+  const targetRatio = 54 / 50;
+
+  let cropW, cropH;
+  if (sw / sh > targetRatio) {
+    cropH = Math.round(sh * 0.72);
+    cropW = Math.round(cropH * targetRatio);
+  } else {
+    cropW = Math.round(sw * 0.62);
+    cropH = Math.round(cropW / targetRatio);
+  }
+
+  cropW = Math.min(sw, Math.max(80, cropW));
+  cropH = Math.min(sh, Math.max(80, cropH));
+
+  const sx = Math.max(0, Math.round((sw - cropW) / 2));
+  const sy = Math.max(0, Math.round(sh * 0.14));
+  const finalSy = Math.min(sh - cropH, sy);
+
+  const faceCrop = document.createElement('canvas');
+  faceCrop.width = 216;
+  faceCrop.height = 200;
+  const fctx = faceCrop.getContext('2d');
+  fctx.drawImage(sourceCanvas, sx, finalSy, cropW, cropH, 0, 0, faceCrop.width, faceCrop.height);
+  return faceCrop;
+}
+
+function takePhoto() {
+  const video = document.getElementById('video');
+  if (!stream || !video.videoWidth) {
+    document.getElementById('modalStatus').textContent = 'Click "Start Camera" or "Upload Photo" first!';
+    return;
+  }
+
+  const temp = document.createElement('canvas');
+  temp.width = video.videoWidth;
+  temp.height = video.videoHeight;
+  const ctx = temp.getContext('2d');
+  ctx.translate(temp.width, 0);
+  ctx.scale(-1, 1);
+  ctx.drawImage(video, 0, 0);
+
+  applyPhoto(cropToFaceSize(temp));
+  closePhotoModal();
+}
+
+function uploadPhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const temp = document.createElement('canvas');
+      temp.width = img.width;
+      temp.height = img.height;
+      temp.getContext('2d').drawImage(img, 0, 0);
+      applyPhoto(cropToFaceSize(temp));
+      closePhotoModal();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+function applyPhoto(sourceCanvas) {
+  photoCanvas = sourceCanvas;
+  const faceImg = document.getElementById('faceImg');
+  faceImg.src = sourceCanvas.toDataURL('image/png');
+  faceImg.style.display = 'block';
+  document.getElementById('facePlaceholder').style.display = 'none';
+
+  updateGenderLabelText();
+  elfStageEl.classList.add('photo-taken');
+}
+
+function stopCamera() {
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
+  }
+  document.getElementById('video').style.display = 'none';
+}
+
+function drawSolidLine(ctx, x1, x2, y, color) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 4.5;
+  ctx.beginPath();
+  ctx.moveTo(x1, y);
+  ctx.lineTo(x2, y);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawDashedLine(ctx, x1, x2, y, color) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 4.2;
+  ctx.setLineDash([10, 7]);
+  ctx.beginPath();
+  ctx.moveTo(x1, y);
+  ctx.lineTo(x2, y);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawElfOnCanvas(ctx, cx, topY, scale, gender, photo) {
+  ctx.save();
+  ctx.translate(cx, topY);
+  ctx.scale(scale, scale);
+
+  if (photo) {
+    const labelText = gender === 'girl' ? 'Girl Elf' : 'Boy Elf';
+    ctx.save();
+    ctx.fillStyle = '#25834c';
+    ctx.beginPath();
+    ctx.roundRect(-70, -142, 140, 36, 18);
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 19px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(labelText, 0, -124);
+    ctx.restore();
+  }
+
+  if (gender === 'girl') {
+    ctx.fillStyle = '#7c3f1d';
+    ctx.strokeStyle = '#222';
+    ctx.lineWidth = 3.5;
+
+    ctx.beginPath();
+    ctx.moveTo(-68, 42);
+    ctx.quadraticCurveTo(-112, 52, -96, 128);
+    ctx.quadraticCurveTo(-80, 104, -60, 88);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(68, 42);
+    ctx.quadraticCurveTo(112, 52, 96, 128);
+    ctx.quadraticCurveTo(80, 104, 60, 88);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#d92b2b';
+    ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    ctx.arc(-74, 64, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(74, 64, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = '#f7c59f';
+  ctx.strokeStyle = '#222';
+  ctx.lineWidth = 3.5;
+
+  ctx.beginPath();
+  ctx.moveTo(-74, 22);
+  ctx.lineTo(-124, 8);
+  ctx.lineTo(-90, 52);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(74, 22);
+  ctx.lineTo(124, 8);
+  ctx.lineTo(90, 52);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Head Base
+  ctx.beginPath();
+  ctx.ellipse(0, 42, 80, 68, 0, 0, Math.PI * 2);
+  ctx.fillStyle = '#f7c59f';
+  ctx.fill();
+  ctx.stroke();
+
+  // Face-Sized Window Inside Head
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(0, 52, 54, 48, 0, 0, Math.PI * 2);
+  ctx.clip();
+
+  if (photo) {
+    const targetW = 108;
+    const targetH = 96;
+    const s = Math.max(targetW / photo.width, targetH / photo.height);
+    const dw = photo.width * s;
+    const dh = photo.height * s;
+    ctx.drawImage(photo, -dw / 2, 52 - dh / 2, dw, dh);
+  } else {
+    ctx.fillStyle = '#fff8e1';
+    ctx.fillRect(-64, 0, 128, 108);
+    ctx.font = 'bold 16px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#111827';
+    ctx.fillText('Face Photo', 0, 58);
+  }
+  ctx.restore();
+
+  // Hair Bangs
+  ctx.fillStyle = '#7c3f1d';
+  ctx.strokeStyle = '#222';
+  ctx.lineWidth = 2.8;
+  ctx.beginPath();
+  ctx.moveTo(-76, 20);
+  ctx.quadraticCurveTo(-54, -14, -28, 8);
+  ctx.quadraticCurveTo(0, -16, 28, 8);
+  ctx.quadraticCurveTo(54, -14, 76, 20);
+  ctx.quadraticCurveTo(48, 6, 24, 12);
+  ctx.quadraticCurveTo(0, -2, -24, 12);
+  ctx.quadraticCurveTo(-48, 6, -76, 20);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Elf Hat
+  ctx.fillStyle = '#d92b2b';
+  ctx.strokeStyle = '#222';
+  ctx.lineWidth = 3.5;
+  ctx.beginPath();
+  ctx.moveTo(-78, 0);
+  ctx.bezierCurveTo(-80, -68, -14, -106, 54, -94);
+  ctx.bezierCurveTo(84, -89, 104, -68, 100, -46);
+  ctx.bezierCurveTo(95, -32, 74, -32, 69, -46);
+  ctx.bezierCurveTo(64, -60, 44, -62, 26, -50);
+  ctx.lineTo(74, 0);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#1b9e4b';
+  ctx.beginPath();
+  ctx.arc(92, -52, 14, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.lineWidth = 2.8;
+  ctx.beginPath();
+  ctx.moveTo(-76, -16);
+  ctx.quadraticCurveTo(-52, -30, -28, -16);
+  ctx.quadraticCurveTo(-4, -30, 20, -16);
+  ctx.quadraticCurveTo(44, -30, 68, -16);
+  ctx.lineTo(75, -3);
+  ctx.quadraticCurveTo(51, -15, 27, -3);
+  ctx.quadraticCurveTo(3, -15, -21, -3);
+  ctx.quadraticCurveTo(-45, -15, -69, -3);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#1b9e4b';
+  ctx.lineWidth = 3.5;
+  ctx.beginPath();
+  ctx.moveTo(-80, -6);
+  ctx.lineTo(70, -6);
+  ctx.lineTo(77, 14);
+  ctx.lineTo(-82, 14);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Legs & Curly Elf Shoes
+  ctx.fillStyle = '#d92b2b';
+  ctx.fillRect(-42, 214, 28, 54);
+  ctx.strokeRect(-42, 214, 28, 54);
+  ctx.fillRect(14, 214, 28, 54);
+  ctx.strokeRect(14, 214, 28, 54);
+
+  ctx.fillStyle = '#1b9e4b';
+  ctx.beginPath();
+  ctx.moveTo(-54, 266);
+  ctx.lineTo(-12, 266);
+  ctx.lineTo(-12, 290);
+  ctx.lineTo(-66, 290);
+  ctx.bezierCurveTo(-80, 290, -82, 266, -66, 262);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(-68, 260, 8, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(12, 266);
+  ctx.lineTo(54, 266);
+  ctx.bezierCurveTo(54, 266, 58, 260, 66, 262);
+  ctx.bezierCurveTo(82, 266, 80, 290, 66, 290);
+  ctx.lineTo(12, 290);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(68, 260, 8, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  // Arms & Hands
+  ctx.beginPath();
+  ctx.moveTo(-58, 116);
+  ctx.lineTo(-100, 164);
+  ctx.lineTo(-84, 180);
+  ctx.lineTo(-46, 138);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#f7c59f';
+  ctx.beginPath();
+  ctx.arc(-97, 178, 15, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#1b9e4b';
+  ctx.beginPath();
+  ctx.moveTo(58, 116);
+  ctx.lineTo(100, 164);
+  ctx.lineTo(84, 180);
+  ctx.lineTo(46, 138);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#f7c59f';
+  ctx.beginPath();
+  ctx.arc(97, 178, 15, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  // Tunic / Dress Body
+  ctx.fillStyle = '#1b9e4b';
+  ctx.beginPath();
+  if (gender === 'boy') {
+    ctx.moveTo(-60, 108);
+    ctx.lineTo(60, 108);
+    ctx.lineTo(76, 220);
+    ctx.lineTo(50, 208);
+    ctx.lineTo(25, 222);
+    ctx.lineTo(0, 208);
+    ctx.lineTo(-25, 222);
+    ctx.lineTo(-50, 208);
+    ctx.lineTo(-76, 220);
+  } else {
+    ctx.moveTo(-56, 108);
+    ctx.lineTo(56, 108);
+    ctx.lineTo(82, 220);
+    ctx.lineTo(-82, 220);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Red Pointed Collar
+  ctx.fillStyle = '#d92b2b';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(-42, 104);
+  ctx.lineTo(0, 132);
+  ctx.lineTo(42, 104);
+  ctx.lineTo(51, 124);
+  ctx.lineTo(25, 138);
+  ctx.lineTo(0, 126);
+  ctx.lineTo(-25, 138);
+  ctx.lineTo(-51, 124);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Black Belt & Gold Buckle
+  ctx.fillStyle = '#222222';
+  ctx.fillRect(-68, 158, 136, 20);
+
+  ctx.strokeStyle = '#f5b700';
+  ctx.lineWidth = 5.5;
+  ctx.strokeRect(-15, 153, 30, 30);
+
+  ctx.restore();
+}
+
+function downloadPNG() {
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const W = canvas.width;
+  const H = canvas.height;
+  const lineColor = currentColor === '#ffffff' ? '#9ca3af' : currentColor;
+
+  // Air-mail striped outer border
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, 0, W, H);
+  ctx.clip();
+  const stripeW = 28;
+  const colors = ['#c62828', '#ffffff', '#25834c', '#ffffff'];
+  for (let i = -H; i < W + H; i += stripeW) {
+    const idx = Math.abs(Math.floor(i / stripeW)) % colors.length;
+    ctx.fillStyle = colors[idx];
+    ctx.beginPath();
+    ctx.moveTo(i, 0);
+    ctx.lineTo(i + stripeW, 0);
+    ctx.lineTo(i + stripeW - H, H);
+    ctx.lineTo(i - H, H);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // Cream parchment inner sheet
+  const grad = ctx.createLinearGradient(0, 24, 0, H - 24);
+  grad.addColorStop(0, '#fffdf5');
+  grad.addColorStop(1, '#fdf5dc');
+  ctx.fillStyle = grad;
+  ctx.fillRect(24, 24, W - 48, H - 48);
+
+  // Gold inner border
+  ctx.strokeStyle = '#d4af37';
+  ctx.lineWidth = 5;
+  ctx.strokeRect(24, 24, W - 48, H - 48);
+
+  // Header: Express badge, Dear Santa title, North Pole Stamp
+  ctx.textAlign = 'left';
+  ctx.fillStyle = fixedTextColor;
+  ctx.font = 'bold 21px sans-serif';
+  ctx.fillText('✈️ NORTH POLE EXPRESS', 62, 78);
+  ctx.font = 'bold 18px sans-serif';
+  ctx.fillText('TO: Santa Claus, Workshop #1', 62, 108);
+
+  // Postage Stamp on Top Right
+  ctx.fillStyle = '#fff9eb';
+  ctx.fillRect(W - 177, 48, 115, 128);
+  ctx.save();
+  ctx.strokeStyle = '#c62828';
+  ctx.lineWidth = 4;
+  ctx.setLineDash([6, 6]);
+  ctx.strokeRect(W - 177, 48, 115, 128);
+  ctx.restore();
+  ctx.textAlign = 'center';
+  ctx.font = '46px sans-serif';
+  ctx.fillText('🦌', W - 119, 112);
+  ctx.fillStyle = fixedTextColor;
+  ctx.font = 'bold 14px sans-serif';
+  ctx.fillText('NORTH POLE', W - 119, 142);
+  ctx.fillText('OFFICIAL MAIL', W - 119, 160);
+
+  // Garland & Title
+  ctx.fillStyle = fixedTextColor;
+  ctx.font = '30px sans-serif';
+  ctx.fillText('❄  ✦  🎄  ✦  ❄', W / 2, 92);
+
+  ctx.font = 'italic bold 72px Georgia';
+  ctx.fillText('Dear Santa', W / 2, 170);
+
+  // Header divider
+  drawDashedLine(ctx, 56, W - 56, 202, 'rgba(198, 40, 40, 0.35)');
+
+  // Maximized Ruled Stationery Card Across Full Paper
+  const boxX = 44;
+  const boxY = 224;
+  const boxW = W - 88;
+  const boxH = 1296;
+
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.76)';
+  ctx.fillRect(boxX, boxY, boxW, boxH);
+  ctx.strokeStyle = '#e2c98d';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+  // Red vertical margin
+  ctx.strokeStyle = 'rgba(198, 40, 40, 0.25)';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(boxX + 20, boxY);
+  ctx.lineTo(boxX + 20, boxY + boxH);
+  ctx.stroke();
+
+  // Fixed Black Letter Text + Colored Writing Lines
+  ctx.textAlign = 'left';
+  ctx.fillStyle = fixedTextColor;
+  ctx.font = '50px Georgia';
+
+  ctx.fillText('My name is', 80, 294);
+  drawSolidLine(ctx, 376, 860, 302, lineColor);
+  ctx.fillText('.', 870, 294);
+
+  ctx.fillText("I'm", 80, 386);
+  drawSolidLine(ctx, 180, 560, 394, lineColor);
+  ctx.fillText('years old.', 576, 386);
+
+  ctx.fillText("I'm in grade", 80, 478);
+  drawSolidLine(ctx, 386, 560, 486, lineColor);
+  ctx.fillText('class', 582, 478);
+  drawSolidLine(ctx, 720, 930, 486, lineColor);
+  ctx.fillText('.', 940, 478);
+
+  ctx.fillText('I live in Nantou City.', 80, 570);
+
+  ctx.fillText("I'm a good", 80, 662);
+  drawSolidLine(ctx, 366, 700, 670, lineColor);
+  ctx.fillText('.', 710, 662);
+
+  ctx.fillText('I want to help you make toys and wrap presents.', 80, 754);
+
+  ctx.fillText('Can I be one of your elves?', 80, 846);
+
+  ctx.fillText('I hope you say YES!', 80, 938);
+
+  // 2 spaces down after "I hope you say YES!" -> "Love," -> 2 spaces down -> solid line
+  ctx.font = '52px Georgia';
+  ctx.fillText('Love,', 80, 1110);
+  drawSolidLine(ctx, 80, 720, 1295, lineColor);
+
+  // Map elf position & scale inside letterBody onto exported PNG stationery box
+  const bodyRect = letterBodyEl.getBoundingClientRect();
+  const handleRect = elfDragHandleEl.getBoundingClientRect();
+  const scaleRatio = bodyRect.width ? boxW / bodyRect.width : 1;
+
+  const relCenterX = bodyRect.width
+    ? ((handleRect.left + handleRect.width / 2) - bodyRect.left) / bodyRect.width
+    : 0.86;
+  const relTopY = bodyRect.height
+    ? (handleRect.top - bodyRect.top) / bodyRect.height
+    : 0.08;
+
+  const elfCanvasCx = boxX + relCenterX * boxW;
+  const elfCanvasTopY = boxY + Math.max(70, relTopY * boxH + 75 * elfScale);
+
+  drawElfOnCanvas(ctx, elfCanvasCx, elfCanvasTopY, 1.05 * elfScale * scaleRatio, elfGender, photoCanvas);
+
+  // Draw placed & resized Christmas stickers onto exported PNG
+  if (bodyRect.width > 0 && bodyRect.height > 0 && placedStickers.length > 0) {
+    ctx.save();
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    placedStickers.forEach(s => {
+      const glyphRect = s.glyphEl.getBoundingClientRect();
+      const sx = boxX + ((glyphRect.left - bodyRect.left) / bodyRect.width) * boxW;
+      const sy = boxY + ((glyphRect.top - bodyRect.top) / bodyRect.height) * boxH;
+      const canvasFontSize = Math.max(24, Math.round(s.size * scaleRatio));
+      ctx.font = `${canvasFontSize}px sans-serif`;
+      ctx.fillText(s.emoji, sx, sy);
+    });
+    ctx.restore();
+  }
+
+  // Draw freehand pencil strokes onto stationery box
+  if (bodyRect.width > 0 && bodyRect.height > 0 && drawCanvas.width > 0 && drawCanvas.height > 0) {
+    ctx.drawImage(
+      drawCanvas,
+      boxX,
+      boxY,
+      boxW,
+      boxH
+    );
+  }
+
+  // Footer with Wax Seal
+  const footY = 1545;
+  drawDashedLine(ctx, 56, W - 56, footY, 'rgba(198, 40, 40, 0.3)');
+  ctx.textAlign = 'left';
+  ctx.fillStyle = fixedTextColor;
+  ctx.font = '34px sans-serif';
+  ctx.fillText('🎄 ⭐ 🎁', 66, footY + 72);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = fixedTextColor;
+  ctx.font = 'bold 23px sans-serif';
+  ctx.fillText("SANTA'S OFFICIAL ELF APPLICATION", W / 2, footY + 69);
+
+  // Wax Seal Circle
+  ctx.beginPath();
+  ctx.arc(W - 104, footY + 58, 36, 0, Math.PI * 2);
+  ctx.fillStyle = '#b71c1c';
+  ctx.fill();
+  ctx.strokeStyle = '#ffd54f';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.fillStyle = '#ffd54f';
+  ctx.font = '34px sans-serif';
+  ctx.fillText('❄', W - 104, footY + 70);
+
+  const link = document.createElement('a');
+  link.download = 'Santa-Elf-Letter.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+</script>
+
+</body>
+</html>
